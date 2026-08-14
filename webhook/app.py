@@ -5,6 +5,8 @@ import logging
 from fastapi import FastAPI, Header, Request, HTTPException, BackgroundTasks
 from typing import Optional, Dict, Any
 
+from webhook.review_runner import run_pr_review
+
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="AgenticSCR Webhook Receiver")
@@ -18,8 +20,22 @@ def verify_signature(payload_body: bytes, secret_token: str, signature_header: s
     return hmac.compare_digest(expected_signature, signature_header)
 
 def process_review_background(pr_data: Dict[str, Any]):
-    # Placeholder for Phase 2 implementation
     logger.info(f"Processing PR review in background: {pr_data}")
+    try:
+        owner = pr_data["repository_full_name"].split("/")[0]
+        repo = pr_data["repository_full_name"].split("/")[1]
+        
+        result = run_pr_review(
+            owner=owner,
+            repo=repo,
+            pr_number=pr_data["pull_request_number"],
+            head_sha=pr_data["pull_request_head_sha"],
+            base_sha=pr_data["pull_request_base_sha"],
+            clone_url=pr_data["repository_clone_url"]
+        )
+        logger.info(f"Review finished successfully for PR #{pr_data['pull_request_number']}")
+    except Exception as e:
+        logger.error(f"Error running PR review: {e}")
 
 @app.post("/webhook/github")
 async def github_webhook(
