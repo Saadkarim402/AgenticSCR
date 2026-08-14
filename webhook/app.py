@@ -6,6 +6,7 @@ from fastapi import FastAPI, Header, Request, HTTPException, BackgroundTasks
 from typing import Optional, Dict, Any
 
 from webhook.review_runner import run_pr_review
+from webhook.github_client import post_pr_review
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,23 @@ def process_review_background(pr_data: Dict[str, Any]):
             base_sha=pr_data["pull_request_base_sha"],
             clone_url=pr_data["repository_clone_url"]
         )
-        logger.info(f"Review finished successfully for PR #{pr_data['pull_request_number']}")
+        
+        # Phase 3: Post results back to PR
+        findings = result.get('confirmed_findings', [])
+        summary = result.get('cli_output', 'AgenticSCR Review Finished.')
+        
+        review_url = post_pr_review(
+            owner=owner,
+            repo=repo,
+            pr_number=pr_data["pull_request_number"],
+            head_sha=pr_data["pull_request_head_sha"],
+            findings=findings,
+            summary=summary
+        )
+        if review_url:
+            logger.info(f"Review posted successfully for PR #{pr_data['pull_request_number']}: {review_url}")
+        else:
+            logger.info(f"Review finished for PR #{pr_data['pull_request_number']}, but no review was posted.")
     except Exception as e:
         logger.error(f"Error running PR review: {e}")
 

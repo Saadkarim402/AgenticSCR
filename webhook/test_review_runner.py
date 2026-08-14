@@ -27,7 +27,7 @@ def test_run_pr_review(mock_chat_anthropic, mock_run_full_review, mock_subproces
     # Assert that subprocess.run was called with expected git commands
     # Clone
     clone_call = mock_subprocess_run.call_args_list[0]
-    assert clone_call[0][0][:4] == ["git", "clone", "--depth=50", "https://github.com/testowner/testrepo.git"]
+    assert clone_call[0][0][:4] == ["git", "clone", "--depth=10", "https://github.com/testowner/testrepo.git"]
     
     # Fetch
     fetch_call = mock_subprocess_run.call_args_list[1]

@@ -25,7 +25,7 @@ def run_pr_review(
         logger.info(f"Created temp directory {tmpdir} for {owner}/{repo} PR #{pr_number}")
         
         # Step 1: Clone
-        clone_cmd = ["git", "clone", "--depth=50", clone_url, tmpdir]
+        clone_cmd = ["git", "clone", "--depth=10", clone_url, tmpdir]
         logger.info(f"Cloning: {' '.join(clone_cmd)}")
         subprocess.run(clone_cmd, check=True, cwd=tmpdir)
         
