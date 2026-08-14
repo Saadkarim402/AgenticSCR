@@ -1,30 +1,47 @@
 # Webhook Receiver and Dashboard
 
-This module extends the core `AgenticSCR` secure-code-review pipeline to run automatically against GitHub Pull Requests. 
+This directory contains the FastAPI service that serves both the GitHub Webhook receiver (which automatically kicks off the PR review pipeline) and the Minimal Dashboard to view review runs.
 
-## What is getting implemented?
+## Local Testing via Ngrok
 
-The full implementation encompasses:
+To test the integration end-to-end locally with GitHub, follow these steps:
 
-1. **Phase 1: Webhook Receiver (Completed)**
-   - A FastAPI application (`app.py`) that listens for GitHub webhook events.
-   - Secure verification of webhook payloads using `X-Hub-Signature-256`.
-   - Filtering to only act on `pull_request` events with actions: `opened`, `synchronize`, and `reopened`.
-   - Dispatching the review to a background task so the HTTP response returns immediately.
+1. **Start the Webhook/Dashboard Server**
+   Ensure you are in the root directory of the repository and have your environment variables set:
+   ```bash
+   export GITHUB_TOKEN=your_personal_access_token
+   export GITHUB_WEBHOOK_SECRET=your_secret_string
+   
+   uvicorn webhook.app:app --host 0.0.0.0 --port 8000
+   ```
 
-2. **Phase 2: PR Review Runner**
-   - Shallow cloning of the repository to a temporary directory.
-   - Adjusting the local git staging area (`git reset --soft`) so that the local diff exactly matches the PR diff.
-   - Executing the existing secure-code-review pipeline (Orchestrator → Detector → Validator) on the staged changes.
+2. **Expose Localhost to the Internet**
+   Use ngrok to expose your local port 8000:
+   ```bash
+   ngrok http 8000
+   ```
+   *Note the `https://[random-string].ngrok-free.app` URL.*
 
-3. **Phase 3: GitHub PR Commenting**
-   - Formatting the findings from the review pipeline into a structured GitHub review.
-   - Pushing inline review comments directly to the Pull Request.
+3. **Configure the GitHub Webhook**
+   - Go to your test repository on GitHub.
+   - Navigate to **Settings** > **Webhooks** > **Add webhook**.
+   - **Payload URL**: `https://[random-string].ngrok-free.app/webhook/github`
+   - **Content type**: `application/json`
+   - **Secret**: The exact string you set for `GITHUB_WEBHOOK_SECRET`
+   - **Which events would you like to trigger this webhook?**: Select **Let me select individual events**, then explicitly check **Pull requests**.
+   - Ensure the webhook is marked **Active** and click **Add webhook**.
 
-4. **Phase 4 & 5: Episodic Logging & Dashboard**
-   - Generating `pr_meta.json` sidecar logs for each run to store PR metadata.
-   - A minimal UI Dashboard displaying a table of all runs, timestamps, PR links, and the number of confirmed/rejected findings.
+4. **Test the Pipeline**
+   - Open a new Pull Request with a staged security vulnerability in your test repository.
+   - GitHub will ping your ngrok URL.
+   - Your local terminal will show the webhook receiving the event, cloning the repository, running the Agentic pipeline (with your local Ollama `qwen2.5:7b` model), and finally commenting on the Pull Request in GitHub!
+   - Navigate to `http://localhost:8000/dashboard` in your browser to see the run populate in the minimal dashboard.
 
-## Local Testing
+## Required Secrets & Environment Variables
 
-Once fully built, you can test this locally by running the FastAPI app via `uvicorn webhook.app:app --reload` and exposing it to GitHub using a tool like `ngrok`.
+When deploying this service in any environment (e.g. Docker, AWS), you **must** supply the following environment variables:
+
+- `GITHUB_TOKEN`: A Personal Access Token (PAT) with repository read/write permissions so the bot can post review comments back to the PR.
+- `GITHUB_WEBHOOK_SECRET`: A secure string used to verify the HMAC signature of incoming requests from GitHub. This guarantees we only act on authorized webhooks.
+
+*(Note: We are using a local Ollama model in this configuration, so an `ANTHROPIC_API_KEY` is not required. However, ensure the machine running the pipeline has access to the local Ollama daemon or supply the Ollama base URL if it's hosted elsewhere).*

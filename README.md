@@ -4,31 +4,27 @@ An implementation of the AgenticSCR paper's dual-agent (Detector +
 Validator) secure code review architecture, integrated with DyRetriever's
 multi-hop dependency tracing, built with LangGraph.
 
-**Status:** the core review pipeline (6/6 pieces) is built and verified
-with scripted fake models — no live LLM calls have been made yet (this was
-built in a sandbox with no `ANTHROPIC_API_KEY`). See
-`ANTIGRAVITY_PROMPT.md` for the next phase: GitHub webhook + PR comment
-integration + a minimal dashboard UI, meant to be handed to Google
-Antigravity to build.
+**Status:** The core review pipeline (Pieces 1-6) and GitHub webhook integration (Phases 1-5) are complete. The pipeline receives pull requests, uses the local `qwen2.5:7b` via Ollama for code reviews, posts comments to GitHub, and displays runs on a local dashboard.
 
 ## Quick start
 
 ```bash
 pip install -r requirements.txt
 
-# run the full test suite (no API key needed — uses scripted fake models)
-python toolset/test_tools.py
-python working_memory/test_working_memory.py
-python detector/test_detector.py
-python dyretriever/test_dyretriever.py
-python validator/test_validator.py
-python orchestrator/test_orchestrator.py
+# run the full test suite
+python -m pytest toolset/ working_memory/ detector/ dyretriever/ validator/ orchestrator/ webhook/ dashboard/
 
 # run for real, against a real repo with staged changes
-export ANTHROPIC_API_KEY=sk-ant-...
-pip install langchain-anthropic
+pip install langchain-ollama
 cd /path/to/some/repo && git add <files>
 python /path/to/agenticscr/cli.py review . --json
+
+# start the GitHub webhook receiver and dashboard
+export GITHUB_TOKEN=your_token
+export GITHUB_WEBHOOK_SECRET=your_secret
+uvicorn webhook.app:app --host 0.0.0.0 --port 8000
+# Dashboard available at: http://localhost:8000/dashboard
+
 ```
 
 ## Architecture
