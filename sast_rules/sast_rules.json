@@ -1,0 +1,1295 @@
+[
+  {
+    "id": "py/bind-socket-all-network-interfaces",
+    "name": "Binding a socket to all network interfaces",
+    "description": "Binding a socket to all interfaces opens it up to traffic from any IPv4 address and is therefore associated with security risks.",
+    "cwe_ids": [
+      "CWE-200"
+    ],
+    "severity": "error",
+    "security_severity": 6.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-200"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CVE-2018-1281/BindToAllInterfaces.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/cookie-injection",
+    "name": "Construction of a cookie using user-supplied input",
+    "description": "Constructing cookies from user input may allow an attacker to perform a Cookie Poisoning attack.",
+    "cwe_ids": [
+      "CWE-020"
+    ],
+    "severity": "warning",
+    "security_severity": 5.0,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-020"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-020/CookieInjection.ql",
+    "examples": {
+      "bad": [
+        "resp.set_cookie(request.args[\"name\"], # BAD: User input is used to set the cookie's name and value\n                    value=request.args[\"name\"])\n    return resp",
+        "resp.headers['Set-Cookie'] = f\"{request.args['name']}={request.args['name']};\" # BAD: User input is used to set the raw cookie header.\n    return resp"
+      ],
+      "good": []
+    }
+  },
+  {
+    "id": "py/incomplete-hostname-regexp",
+    "name": "Incomplete regular expression for hostnames",
+    "description": "Matching a URL or hostname against a regular expression that contains an unescaped dot as part of the hostname might match more hostnames than expected.",
+    "cwe_ids": [
+      "CWE-020"
+    ],
+    "severity": "warning",
+    "security_severity": 7.8,
+    "precision": "high",
+    "tags": [
+      "correctness",
+      "security",
+      "external/cwe/cwe-020"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-020/IncompleteHostnameRegExp.ql",
+    "examples": {
+      "bad": [
+        "resp.set_cookie(request.args[\"name\"], # BAD: User input is used to set the cookie's name and value\n                    value=request.args[\"name\"])\n    return resp",
+        "resp.headers['Set-Cookie'] = f\"{request.args['name']}={request.args['name']};\" # BAD: User input is used to set the raw cookie header.\n    return resp"
+      ],
+      "good": []
+    }
+  },
+  {
+    "id": "py/incomplete-url-substring-sanitization",
+    "name": "Incomplete URL substring sanitization",
+    "description": "Security checks on the substrings of an unparsed URL are often vulnerable to bypassing.",
+    "cwe_ids": [
+      "CWE-020"
+    ],
+    "severity": "warning",
+    "security_severity": 7.8,
+    "precision": "high",
+    "tags": [
+      "correctness",
+      "security",
+      "external/cwe/cwe-020"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-020/IncompleteUrlSubstringSanitization.ql",
+    "examples": {
+      "bad": [
+        "resp.set_cookie(request.args[\"name\"], # BAD: User input is used to set the cookie's name and value\n                    value=request.args[\"name\"])\n    return resp",
+        "resp.headers['Set-Cookie'] = f\"{request.args['name']}={request.args['name']};\" # BAD: User input is used to set the raw cookie header.\n    return resp"
+      ],
+      "good": []
+    }
+  },
+  {
+    "id": "py/overly-large-range",
+    "name": "Overly permissive regular expression range",
+    "description": "Overly permissive regular expression ranges match a wider range of characters than intended. This may allow an attacker to bypass a filter or sanitizer.",
+    "cwe_ids": [
+      "CWE-020"
+    ],
+    "severity": "warning",
+    "security_severity": 4.0,
+    "precision": "high",
+    "tags": [
+      "correctness",
+      "security",
+      "external/cwe/cwe-020"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-020/OverlyLargeRange.ql",
+    "examples": {
+      "bad": [
+        "resp.set_cookie(request.args[\"name\"], # BAD: User input is used to set the cookie's name and value\n                    value=request.args[\"name\"])\n    return resp",
+        "resp.headers['Set-Cookie'] = f\"{request.args['name']}={request.args['name']};\" # BAD: User input is used to set the raw cookie header.\n    return resp"
+      ],
+      "good": []
+    }
+  },
+  {
+    "id": "py/count-untrusted-data-external-api",
+    "name": "Frequency counts for external APIs that are used with untrusted data",
+    "description": "This reports the external APIs that are used with untrusted data, along with how frequently the API is called, and how many unique sources of untrusted data flow to it.",
+    "cwe_ids": [
+      "CWE-020"
+    ],
+    "severity": null,
+    "security_severity": null,
+    "precision": null,
+    "tags": [
+      "security",
+      "external/cwe/cwe-020"
+    ],
+    "language": "python",
+    "kind": "table",
+    "source_query_path": "python/ql/src/Security/CWE-020-ExternalAPIs/ExternalAPIsUsedWithUntrustedData.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/untrusted-data-to-external-api",
+    "name": "Untrusted data passed to external API",
+    "description": "Data provided remotely is used in this external API without sanitization, which could be a security risk.",
+    "cwe_ids": [
+      "CWE-020"
+    ],
+    "severity": "error",
+    "security_severity": 7.8,
+    "precision": "low",
+    "tags": [
+      "security",
+      "external/cwe/cwe-020"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-020-ExternalAPIs/UntrustedDataToExternalAPI.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/path-injection",
+    "name": "Uncontrolled data used in path expression",
+    "description": "Accessing paths influenced by users can allow an attacker to access unexpected resources.",
+    "cwe_ids": [
+      "CWE-022",
+      "CWE-023",
+      "CWE-036",
+      "CWE-073",
+      "CWE-099"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "correctness",
+      "security",
+      "external/cwe/cwe-022",
+      "external/cwe/cwe-023",
+      "external/cwe/cwe-036",
+      "external/cwe/cwe-073",
+      "external/cwe/cwe-099"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-022/PathInjection.ql",
+    "examples": {
+      "bad": [
+        "# BAD: This could read any file on the file system\n    data = open(filename, 'rb').read()\n    return data",
+        "# BAD: This could still read any file on the file system\n    data = open(os.path.join(base_path, filename), 'rb').read()\n    return data",
+        "#BAD : This could write any file on the filesystem.\n    for entry in tar:\n        tar.extract(entry, \"/tmp/unpack/\")"
+      ],
+      "good": [
+        "#GOOD -- Verify with normalised version of path\n    fullpath = os.path.normpath(os.path.join(base_path, filename))\n    if not fullpath.startswith(base_path):\n        raise Exception(\"not allowed\")\n    data = open(fullpath, 'rb').read()\n    return data",
+        "#GOOD: Check that entry is safe\n        if os.path.isabs(entry.name) or \"..\" in entry.name:\n            raise ValueError(\"Illegal tar archive entry\")\n        tar.extract(entry, \"/tmp/unpack/\")"
+      ]
+    }
+  },
+  {
+    "id": "py/tarslip",
+    "name": "Arbitrary file write during tarfile extraction",
+    "description": "Extracting files from a malicious tar archive without validating that the destination file path is within the destination directory can cause files outside the destination directory to be overwritten.",
+    "cwe_ids": [
+      "CWE-022"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "medium",
+    "tags": [
+      "security",
+      "external/cwe/cwe-022"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-022/TarSlip.ql",
+    "examples": {
+      "bad": [
+        "# BAD: This could read any file on the file system\n    data = open(filename, 'rb').read()\n    return data",
+        "# BAD: This could still read any file on the file system\n    data = open(os.path.join(base_path, filename), 'rb').read()\n    return data",
+        "#BAD : This could write any file on the filesystem.\n    for entry in tar:\n        tar.extract(entry, \"/tmp/unpack/\")"
+      ],
+      "good": [
+        "#GOOD -- Verify with normalised version of path\n    fullpath = os.path.normpath(os.path.join(base_path, filename))\n    if not fullpath.startswith(base_path):\n        raise Exception(\"not allowed\")\n    data = open(fullpath, 'rb').read()\n    return data",
+        "#GOOD: Check that entry is safe\n        if os.path.isabs(entry.name) or \"..\" in entry.name:\n            raise ValueError(\"Illegal tar archive entry\")\n        tar.extract(entry, \"/tmp/unpack/\")"
+      ]
+    }
+  },
+  {
+    "id": "py/template-injection",
+    "name": "Server Side Template Injection",
+    "description": "Using user-controlled data to create a template can lead to remote code execution or cross site scripting.",
+    "cwe_ids": [
+      "CWE-074"
+    ],
+    "severity": "error",
+    "security_severity": 9.3,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-074"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-074/TemplateInjection.ql",
+    "examples": {
+      "bad": [
+        "# BAD: Template is constructed from user input. \n    t = Template(template)"
+      ],
+      "good": [
+        "# GOOD: Template is a constant, not constructed from user input\n    t = Template(\"Hello, {{name}}!\")",
+        "# GOOD: A sandboxed environment is used to construct the template. \n    t = env.from_string(template)"
+      ]
+    }
+  },
+  {
+    "id": "py/command-line-injection",
+    "name": "Uncontrolled command line",
+    "description": "Using externally controlled strings in a command line may allow a malicious user to change the meaning of the command.",
+    "cwe_ids": [
+      "CWE-078",
+      "CWE-088"
+    ],
+    "severity": "error",
+    "security_severity": 9.8,
+    "precision": "high",
+    "tags": [
+      "correctness",
+      "security",
+      "external/cwe/cwe-078",
+      "external/cwe/cwe-088"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-078/CommandInjection.ql",
+    "examples": {
+      "bad": [
+        "#BAD -- No sanitizing of input\n        subprocess.call([\"application\", action])"
+      ],
+      "good": [
+        "#GOOD -- Use an allowlist\n        subprocess.call([\"application\", COMMANDS[action]])"
+      ]
+    }
+  },
+  {
+    "id": "py/shell-command-constructed-from-input",
+    "name": "Unsafe shell command constructed from library input",
+    "description": "Using externally controlled strings in a command line may allow a malicious user to change the meaning of the command.",
+    "cwe_ids": [
+      "CWE-078",
+      "CWE-088",
+      "CWE-073"
+    ],
+    "severity": "error",
+    "security_severity": 6.3,
+    "precision": "medium",
+    "tags": [
+      "correctness",
+      "security",
+      "external/cwe/cwe-078",
+      "external/cwe/cwe-088",
+      "external/cwe/cwe-073"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-078/UnsafeShellCommandConstruction.ql",
+    "examples": {
+      "bad": [
+        "#BAD -- No sanitizing of input\n        subprocess.call([\"application\", action])"
+      ],
+      "good": [
+        "#GOOD -- Use an allowlist\n        subprocess.call([\"application\", COMMANDS[action]])"
+      ]
+    }
+  },
+  {
+    "id": "py/jinja2/autoescape-false",
+    "name": "Jinja2 templating with autoescape=False",
+    "description": "Using jinja2 templates with 'autoescape=False' can cause a cross-site scripting vulnerability.",
+    "cwe_ids": [
+      "CWE-079"
+    ],
+    "severity": "error",
+    "security_severity": 7.8,
+    "precision": "medium",
+    "tags": [
+      "security",
+      "external/cwe/cwe-079"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-079/Jinja2WithoutEscaping.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/reflective-xss",
+    "name": "Reflected server-side cross-site scripting",
+    "description": "Writing user input directly to a web page allows for a cross-site scripting vulnerability.",
+    "cwe_ids": [
+      "CWE-079",
+      "CWE-116"
+    ],
+    "severity": "error",
+    "security_severity": 7.8,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-079",
+      "external/cwe/cwe-116"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-079/ReflectedXss.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/sql-injection",
+    "name": "SQL query built from user-controlled sources",
+    "description": "Building a SQL query from user-controlled sources is vulnerable to insertion of malicious SQL code by the user.",
+    "cwe_ids": [
+      "CWE-089"
+    ],
+    "severity": "error",
+    "security_severity": 8.8,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-089"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-089/SqlInjection.ql",
+    "examples": {
+      "bad": [
+        "# BAD -- Using string formatting\n        cursor.execute(\"SELECT * FROM users WHERE username = '%s'\" % username)\n        user = cursor.fetchone()",
+        "# BAD -- Manually quoting placeholder (%s)\n        cursor.execute(\"SELECT * FROM users WHERE username = '%s'\", username)\n        user = cursor.fetchone()"
+      ],
+      "good": [
+        "# GOOD -- Using parameters\n        cursor.execute(\"SELECT * FROM users WHERE username = %s\", username)\n        user = cursor.fetchone()"
+      ]
+    }
+  },
+  {
+    "id": "py/ldap-injection",
+    "name": "LDAP query built from user-controlled sources",
+    "description": "Building an LDAP query from user-controlled sources is vulnerable to insertion of malicious LDAP code by the user.",
+    "cwe_ids": [
+      "CWE-090"
+    ],
+    "severity": "error",
+    "security_severity": 9.8,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-090"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-090/LdapInjection.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/code-injection",
+    "name": "Code injection",
+    "description": "Interpreting unsanitized user input as code allows a malicious user to perform arbitrary code execution.",
+    "cwe_ids": [
+      "CWE-094",
+      "CWE-095",
+      "CWE-116"
+    ],
+    "severity": "error",
+    "security_severity": 9.3,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-094",
+      "external/cwe/cwe-095",
+      "external/cwe/cwe-116"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-094/CodeInjection.ql",
+    "examples": {
+      "bad": [
+        "#BAD -- Allow user to define code to be run.\n        exec(\"setname('%s')\" % first_name)"
+      ],
+      "good": [
+        "#GOOD --Call code directly\n        setname(first_name)"
+      ]
+    }
+  },
+  {
+    "id": "py/client-exposed-cookie",
+    "name": "Sensitive cookie missing `HttpOnly` attribute",
+    "description": "Cookies without the `HttpOnly` attribute set can be accessed by JS scripts, making them more vulnerable to XSS attacks.",
+    "cwe_ids": [
+      "CWE-1004"
+    ],
+    "severity": "warning",
+    "security_severity": 5.0,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-1004"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-1004/NonHttpOnlyCookie.ql",
+    "examples": {
+      "bad": [
+        "resp.set_cookie(\"sessionid\", value=\"value\", samesite='None') # BAD: the SameSite attribute is set to 'None' and the 'Secure' and 'HttpOnly' attributes are set to False by default.\n    return resp"
+      ],
+      "good": [
+        "resp.set_cookie(\"sessionid\", value=\"value\", secure=True, httponly=True, samesite='Strict') # GOOD: Attributes are securely set\n    return resp",
+        "resp.headers['Set-Cookie'] = \"sessionid=value; Secure; HttpOnly; SameSite=Strict\" # GOOD: Attributes are securely set \n    return resp"
+      ]
+    }
+  },
+  {
+    "id": "py/http-response-splitting",
+    "name": "HTTP Response Splitting",
+    "description": "Writing user input directly to an HTTP header makes code vulnerable to attack by header splitting.",
+    "cwe_ids": [
+      "CWE-113",
+      "CWE-079"
+    ],
+    "severity": "error",
+    "security_severity": 6.1,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-113",
+      "external/cwe/cwe-079"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-113/HeaderInjection.ql",
+    "examples": {
+      "bad": [
+        "# BAD: User input is used as part of the header name.\n    response.headers[custom_header] = \"HeaderValue\" \n    return response"
+      ],
+      "good": [
+        "# GOOD: Line break characters are removed from the input.\n    response.headers[custom_header] = \"HeaderValue\" \n    return response"
+      ]
+    }
+  },
+  {
+    "id": "py/bad-tag-filter",
+    "name": "Bad HTML filtering regexp",
+    "description": "Matching HTML tags using regular expressions is hard to do right, and can easily lead to security issues.",
+    "cwe_ids": [
+      "CWE-116",
+      "CWE-020",
+      "CWE-185",
+      "CWE-186"
+    ],
+    "severity": "warning",
+    "security_severity": 7.8,
+    "precision": "high",
+    "tags": [
+      "correctness",
+      "security",
+      "external/cwe/cwe-116",
+      "external/cwe/cwe-020",
+      "external/cwe/cwe-185",
+      "external/cwe/cwe-186"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-116/BadTagFilter.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/log-injection",
+    "name": "Log Injection",
+    "description": "Building log entries from user-controlled data is vulnerable to insertion of forged log entries by a malicious user.",
+    "cwe_ids": [
+      "CWE-117"
+    ],
+    "severity": "error",
+    "security_severity": 6.1,
+    "precision": "medium",
+    "tags": [
+      "security",
+      "external/cwe/cwe-117"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-117/LogInjection.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/samesite-none-cookie",
+    "name": "Sensitive cookie with `SameSite` attribute set to `None`",
+    "description": "Cookies with `SameSite` set to `None` can allow for Cross-Site Request Forgery (CSRF) attacks.",
+    "cwe_ids": [
+      "CWE-1275"
+    ],
+    "severity": "warning",
+    "security_severity": 4.0,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-1275"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-1275/SameSiteNoneCookie.ql",
+    "examples": {
+      "bad": [
+        "resp.set_cookie(\"sessionid\", value=\"value\", samesite='None') # BAD: the SameSite attribute is set to 'None' and the 'Secure' and 'HttpOnly' attributes are set to False by default.\n    return resp"
+      ],
+      "good": [
+        "resp.set_cookie(\"sessionid\", value=\"value\", secure=True, httponly=True, samesite='Strict') # GOOD: Attributes are securely set\n    return resp",
+        "resp.headers['Set-Cookie'] = \"sessionid=value; Secure; HttpOnly; SameSite=Strict\" # GOOD: Attributes are securely set \n    return resp"
+      ]
+    }
+  },
+  {
+    "id": "py/stack-trace-exposure",
+    "name": "Information exposure through an exception",
+    "description": "Leaking information about an exception, such as messages and stack traces, to an external user can expose implementation details that are useful to an attacker for developing a subsequent exploit.",
+    "cwe_ids": [
+      "CWE-209",
+      "CWE-497"
+    ],
+    "severity": "error",
+    "security_severity": 5.4,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-209",
+      "external/cwe/cwe-497"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-209/StackTraceExposure.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/flask-debug",
+    "name": "Flask app is run in debug mode",
+    "description": "Running a Flask app in debug mode may allow an attacker to run arbitrary code through the Werkzeug debugger.",
+    "cwe_ids": [
+      "CWE-215",
+      "CWE-489"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-215",
+      "external/cwe/cwe-489"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-215/FlaskDebug.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/pam-auth-bypass",
+    "name": "PAM authorization bypass due to incorrect usage",
+    "description": "Not using `pam_acct_mgmt` after `pam_authenticate` to check the validity of a login can lead to authorization bypass.",
+    "cwe_ids": [
+      "CWE-285"
+    ],
+    "severity": "warning",
+    "security_severity": 8.1,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-285"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-285/PamAuthorization.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/paramiko-missing-host-key-validation",
+    "name": "Accepting unknown SSH host keys when using Paramiko",
+    "description": "Accepting unknown host keys can allow man-in-the-middle attacks.",
+    "cwe_ids": [
+      "CWE-295"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-295"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-295/MissingHostKeyValidation.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/request-without-cert-validation",
+    "name": "Request without certificate validation",
+    "description": "Making a request without certificate validation can allow man-in-the-middle attacks.",
+    "cwe_ids": [
+      "CWE-295"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "medium",
+    "tags": [
+      "security",
+      "external/cwe/cwe-295"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-295/RequestWithoutValidation.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/clear-text-logging-sensitive-data",
+    "name": "Clear-text logging of sensitive information",
+    "description": "Logging sensitive information without encryption or hashing can expose it to an attacker.",
+    "cwe_ids": [
+      "CWE-312",
+      "CWE-359",
+      "CWE-532"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-312",
+      "external/cwe/cwe-359",
+      "external/cwe/cwe-532"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-312/CleartextLogging.ql",
+    "examples": {
+      "bad": [
+        "# BAD: Logging cleartext sensitive data\nimport os\nprint(f\"[INFO] Environment: {os.environ}\")"
+      ],
+      "good": [
+        "# GOOD: it is fine to log data that is not sensitive\nprint(f\"[INFO] Some object contains: {not_sensitive_data}\")"
+      ]
+    }
+  },
+  {
+    "id": "py/clear-text-storage-sensitive-data",
+    "name": "Clear-text storage of sensitive information",
+    "description": "Sensitive information stored without encryption or hashing can expose it to an attacker.",
+    "cwe_ids": [
+      "CWE-312",
+      "CWE-315",
+      "CWE-359"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-312",
+      "external/cwe/cwe-315",
+      "external/cwe/cwe-359"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-312/CleartextStorage.ql",
+    "examples": {
+      "bad": [
+        "# BAD: Logging cleartext sensitive data\nimport os\nprint(f\"[INFO] Environment: {os.environ}\")"
+      ],
+      "good": [
+        "# GOOD: it is fine to log data that is not sensitive\nprint(f\"[INFO] Some object contains: {not_sensitive_data}\")"
+      ]
+    }
+  },
+  {
+    "id": "py/weak-crypto-key",
+    "name": "Use of weak cryptographic key",
+    "description": "Use of a cryptographic key that is too small may allow the encryption to be broken.",
+    "cwe_ids": [
+      "CWE-326"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-326"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-326/WeakCryptoKey.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/weak-cryptographic-algorithm",
+    "name": "Use of a broken or weak cryptographic algorithm",
+    "description": "Using broken or weak cryptographic algorithms can compromise security.",
+    "cwe_ids": [
+      "CWE-327"
+    ],
+    "severity": "warning",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-327"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-327/BrokenCryptoAlgorithm.ql",
+    "examples": {
+      "bad": [
+        "channel.send(cipher.encrypt(message)) # BAD: weak encryption",
+        "hash = hashlib.md5(certificate).hexdigest() # BAD\n    return hash == known_hash",
+        "return hashlib.sha256(password + salt).hexdigest() # BAD"
+      ],
+      "good": [
+        "channel.send(cipher.encrypt(message)) # GOOD: strong encryption",
+        "hash = hashlib.sha256(certificate).hexdigest() # GOOD\n    return hash == known_hash",
+        "return ph.hash(password) # GOOD\n\ndef check_password(password: str, known_hash):\n    ph = PasswordHasher()",
+        "return ph.verify(known_hash, password) # GOOD"
+      ]
+    }
+  },
+  {
+    "id": "py/insecure-default-protocol",
+    "name": "Default version of SSL/TLS may be insecure",
+    "description": "Leaving the SSL/TLS version unspecified may result in an insecure default protocol being used.",
+    "cwe_ids": [
+      "CWE-327"
+    ],
+    "severity": "warning",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-327"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-327/InsecureDefaultProtocol.ql",
+    "examples": {
+      "bad": [
+        "channel.send(cipher.encrypt(message)) # BAD: weak encryption",
+        "hash = hashlib.md5(certificate).hexdigest() # BAD\n    return hash == known_hash",
+        "return hashlib.sha256(password + salt).hexdigest() # BAD"
+      ],
+      "good": [
+        "channel.send(cipher.encrypt(message)) # GOOD: strong encryption",
+        "hash = hashlib.sha256(certificate).hexdigest() # GOOD\n    return hash == known_hash",
+        "return ph.hash(password) # GOOD\n\ndef check_password(password: str, known_hash):\n    ph = PasswordHasher()",
+        "return ph.verify(known_hash, password) # GOOD"
+      ]
+    }
+  },
+  {
+    "id": "py/insecure-protocol",
+    "name": "Use of insecure SSL/TLS version",
+    "description": "Using an insecure SSL/TLS version may leave the connection vulnerable to attacks.",
+    "cwe_ids": [
+      "CWE-327"
+    ],
+    "severity": "warning",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-327"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-327/InsecureProtocol.ql",
+    "examples": {
+      "bad": [
+        "channel.send(cipher.encrypt(message)) # BAD: weak encryption",
+        "hash = hashlib.md5(certificate).hexdigest() # BAD\n    return hash == known_hash",
+        "return hashlib.sha256(password + salt).hexdigest() # BAD"
+      ],
+      "good": [
+        "channel.send(cipher.encrypt(message)) # GOOD: strong encryption",
+        "hash = hashlib.sha256(certificate).hexdigest() # GOOD\n    return hash == known_hash",
+        "return ph.hash(password) # GOOD\n\ndef check_password(password: str, known_hash):\n    ph = PasswordHasher()",
+        "return ph.verify(known_hash, password) # GOOD"
+      ]
+    }
+  },
+  {
+    "id": "py/weak-sensitive-data-hashing",
+    "name": "Use of a broken or weak cryptographic hashing algorithm on sensitive data",
+    "description": "Using broken or weak cryptographic hashing algorithms can compromise security.",
+    "cwe_ids": [
+      "CWE-327",
+      "CWE-328",
+      "CWE-916"
+    ],
+    "severity": "warning",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-327",
+      "external/cwe/cwe-328",
+      "external/cwe/cwe-916"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-327/WeakSensitiveDataHashing.ql",
+    "examples": {
+      "bad": [
+        "channel.send(cipher.encrypt(message)) # BAD: weak encryption",
+        "hash = hashlib.md5(certificate).hexdigest() # BAD\n    return hash == known_hash",
+        "return hashlib.sha256(password + salt).hexdigest() # BAD"
+      ],
+      "good": [
+        "channel.send(cipher.encrypt(message)) # GOOD: strong encryption",
+        "hash = hashlib.sha256(certificate).hexdigest() # GOOD\n    return hash == known_hash",
+        "return ph.hash(password) # GOOD\n\ndef check_password(password: str, known_hash):\n    ph = PasswordHasher()",
+        "return ph.verify(known_hash, password) # GOOD"
+      ]
+    }
+  },
+  {
+    "id": "py/csrf-protection-disabled",
+    "name": "CSRF protection weakened or disabled",
+    "description": "Disabling or weakening CSRF protection may make the application vulnerable to a Cross-Site Request Forgery (CSRF) attack.",
+    "cwe_ids": [
+      "CWE-352"
+    ],
+    "severity": "warning",
+    "security_severity": 8.8,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-352"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-352/CSRFProtectionDisabled.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/insecure-temporary-file",
+    "name": "Insecure temporary file",
+    "description": "Creating a temporary file using this method may be insecure.",
+    "cwe_ids": [
+      "CWE-377"
+    ],
+    "severity": "error",
+    "security_severity": 7.0,
+    "precision": "high",
+    "tags": [
+      "external/cwe/cwe-377",
+      "security"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-377/InsecureTemporaryFile.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/unsafe-deserialization",
+    "name": "Deserialization of user-controlled data",
+    "description": "Deserializing user-controlled data may allow attackers to execute arbitrary code.",
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "severity": "error",
+    "security_severity": 9.8,
+    "precision": "high",
+    "tags": [
+      "external/cwe/cwe-502",
+      "security",
+      "serialization"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-502/UnsafeDeserialization.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/url-redirection",
+    "name": "URL redirection from remote source",
+    "description": "URL redirection based on unvalidated user input may cause redirection to malicious web sites.",
+    "cwe_ids": [
+      "CWE-601"
+    ],
+    "severity": "error",
+    "security_severity": 6.1,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-601"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-601/UrlRedirect.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/xxe",
+    "name": "XML external entity expansion",
+    "description": "Parsing user input as an XML document with external entity expansion is vulnerable to XXE attacks.",
+    "cwe_ids": [
+      "CWE-611",
+      "CWE-827"
+    ],
+    "severity": "error",
+    "security_severity": 9.1,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-611",
+      "external/cwe/cwe-827"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-611/Xxe.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/insecure-cookie",
+    "name": "Failure to use secure cookies",
+    "description": "Insecure cookies may be sent in cleartext, which makes them vulnerable to interception.",
+    "cwe_ids": [
+      "CWE-614"
+    ],
+    "severity": "warning",
+    "security_severity": 5.0,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-614"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-614/InsecureCookie.ql",
+    "examples": {
+      "bad": [
+        "resp.set_cookie(\"sessionid\", value=\"value\", samesite='None') # BAD: the SameSite attribute is set to 'None' and the 'Secure' and 'HttpOnly' attributes are set to False by default.\n    return resp"
+      ],
+      "good": [
+        "resp.set_cookie(\"sessionid\", value=\"value\", secure=True, httponly=True, samesite='Strict') # GOOD: Attributes are securely set\n    return resp",
+        "resp.headers['Set-Cookie'] = \"sessionid=value; Secure; HttpOnly; SameSite=Strict\" # GOOD: Attributes are securely set \n    return resp"
+      ]
+    }
+  },
+  {
+    "id": "py/xpath-injection",
+    "name": "XPath query built from user-controlled sources",
+    "description": "Building a XPath query from user-controlled sources is vulnerable to insertion of malicious Xpath code by the user.",
+    "cwe_ids": [
+      "CWE-643"
+    ],
+    "severity": "error",
+    "security_severity": 9.8,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-643"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-643/XpathInjection.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/polynomial-redos",
+    "name": "Polynomial regular expression used on uncontrolled data",
+    "description": "A regular expression that can require polynomial time to match may be vulnerable to denial-of-service attacks.",
+    "cwe_ids": [
+      "CWE-1333",
+      "CWE-730",
+      "CWE-400"
+    ],
+    "severity": "warning",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-1333",
+      "external/cwe/cwe-730",
+      "external/cwe/cwe-400"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-730/PolynomialReDoS.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/redos",
+    "name": "Inefficient regular expression",
+    "description": "A regular expression that requires exponential time to match certain inputs can be a performance bottleneck, and may be vulnerable to denial-of-service attacks.",
+    "cwe_ids": [
+      "CWE-1333",
+      "CWE-730",
+      "CWE-400"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-1333",
+      "external/cwe/cwe-730",
+      "external/cwe/cwe-400"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-730/ReDoS.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/regex-injection",
+    "name": "Regular expression injection",
+    "description": "User input should not be used in regular expressions without first being escaped, otherwise a malicious user may be able to inject an expression that could require exponential time on certain inputs.",
+    "cwe_ids": [
+      "CWE-730",
+      "CWE-400"
+    ],
+    "severity": "error",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-730",
+      "external/cwe/cwe-400"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-730/RegexInjection.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/overly-permissive-file",
+    "name": "Overly permissive file permissions",
+    "description": "Allowing files to be readable or writable by users other than the owner may allow sensitive information to be accessed.",
+    "cwe_ids": [
+      "CWE-732"
+    ],
+    "severity": "warning",
+    "security_severity": 7.8,
+    "precision": "medium",
+    "tags": [
+      "external/cwe/cwe-732",
+      "security"
+    ],
+    "language": "python",
+    "kind": "problem",
+    "source_query_path": "python/ql/src/Security/CWE-732/WeakFilePermissions.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/xml-bomb",
+    "name": "XML internal entity expansion",
+    "description": "Parsing user input as an XML document with arbitrary internal entity expansion is vulnerable to denial-of-service attacks.",
+    "cwe_ids": [
+      "CWE-776",
+      "CWE-400"
+    ],
+    "severity": "warning",
+    "security_severity": 7.5,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-776",
+      "external/cwe/cwe-400"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-776/XmlBomb.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/hardcoded-credentials",
+    "name": "Hard-coded credentials",
+    "description": "Credentials are hard coded in the source code of the application.",
+    "cwe_ids": [
+      "CWE-259",
+      "CWE-321",
+      "CWE-798"
+    ],
+    "severity": "error",
+    "security_severity": 9.8,
+    "precision": "low",
+    "tags": [
+      "security",
+      "external/cwe/cwe-259",
+      "external/cwe/cwe-321",
+      "external/cwe/cwe-798"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-798/HardcodedCredentials.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  },
+  {
+    "id": "py/full-ssrf",
+    "name": "Full server-side request forgery",
+    "description": "Making a network request to a URL that is fully user-controlled allows for request forgery attacks.",
+    "cwe_ids": [
+      "CWE-918"
+    ],
+    "severity": "error",
+    "security_severity": 9.1,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-918"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-918/FullServerSideRequestForgery.ql",
+    "examples": {
+      "bad": [
+        "# BAD: user has full control of URL\n    resp = requests.get(\"https://\" + target + \".example.com/data/\")",
+        "# BAD: user can fully control the path component of the URL\n    resp = requests.get(\"https://api.example.com/user_info/\" + user_id)"
+      ],
+      "good": [
+        "# GOOD: `subdomain` is controlled by the server.\n    subdomain = \"europe\" if target == \"EU\" else \"world\"\n    resp = requests.get(\"https://\" + subdomain + \".example.com/data/\")",
+        "# GOOD: user_id is restricted to be alpha-numeric, and cannot alter path component of URL\n        resp = requests.get(\"https://api.example.com/user_info/\" + user_id)"
+      ]
+    }
+  },
+  {
+    "id": "py/partial-ssrf",
+    "name": "Partial server-side request forgery",
+    "description": "Making a network request to a URL that is partially user-controlled allows for request forgery attacks.",
+    "cwe_ids": [
+      "CWE-918"
+    ],
+    "severity": "error",
+    "security_severity": 9.1,
+    "precision": "medium",
+    "tags": [
+      "security",
+      "external/cwe/cwe-918"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-918/PartialServerSideRequestForgery.ql",
+    "examples": {
+      "bad": [
+        "# BAD: user has full control of URL\n    resp = requests.get(\"https://\" + target + \".example.com/data/\")",
+        "# BAD: user can fully control the path component of the URL\n    resp = requests.get(\"https://api.example.com/user_info/\" + user_id)"
+      ],
+      "good": [
+        "# GOOD: `subdomain` is controlled by the server.\n    subdomain = \"europe\" if target == \"EU\" else \"world\"\n    resp = requests.get(\"https://\" + subdomain + \".example.com/data/\")",
+        "# GOOD: user_id is restricted to be alpha-numeric, and cannot alter path component of URL\n        resp = requests.get(\"https://api.example.com/user_info/\" + user_id)"
+      ]
+    }
+  },
+  {
+    "id": "py/nosql-injection",
+    "name": "NoSQL Injection",
+    "description": "Building a NoSQL query from user-controlled sources is vulnerable to insertion of malicious NoSQL code by the user.",
+    "cwe_ids": [
+      "CWE-943"
+    ],
+    "severity": "error",
+    "security_severity": 8.8,
+    "precision": "high",
+    "tags": [
+      "security",
+      "external/cwe/cwe-943"
+    ],
+    "language": "python",
+    "kind": "path-problem",
+    "source_query_path": "python/ql/src/Security/CWE-943/NoSqlInjection.ql",
+    "examples": {
+      "bad": [],
+      "good": []
+    }
+  }
+]
