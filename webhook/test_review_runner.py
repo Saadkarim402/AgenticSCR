@@ -3,8 +3,8 @@ from webhook.review_runner import run_pr_review
 
 @patch("webhook.review_runner.subprocess.run")
 @patch("webhook.review_runner.run_full_review")
-@patch("webhook.review_runner.ChatAnthropic")
-def test_run_pr_review(mock_chat_anthropic, mock_run_full_review, mock_subprocess_run):
+@patch("webhook.review_runner.ChatOllama")
+def test_run_pr_review(mock_chat_ollama, mock_run_full_review, mock_subprocess_run):
     # Setup mocks
     mock_run_full_review.return_value = {
         "confirmed_findings": [{"id": 1}],

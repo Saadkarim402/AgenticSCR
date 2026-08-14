@@ -5,6 +5,7 @@ pydantic>=2.13.4
 
 # Needed for LIVE runs (not required for the scripted/fake-model test suite)
 langchain-anthropic>=0.3.0
+langchain-ollama>=0.1.0
 
 # --- Not yet in this project — Antigravity will add these when it builds
 # the webhook + UI piece described in ANTIGRAVITY_PROMPT.md:
