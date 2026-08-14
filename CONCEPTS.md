@@ -34,3 +34,26 @@ The `--soft` flag is the magic. A normal reset (`--hard`) would wipe out the fil
 
 ### The Result
 Because the Staging Area now contains the exact differences between the feature branch and the main branch, running `git diff --staged` outputs the exact PR diff. We have perfectly spoon-fed the Pull Request changes directly into the AI pipeline without modifying the pipeline itself.
+
+---
+
+## Why Shallow Clone with `--depth=50`? (Phase 2)
+
+When downloading the Pull Request code, we run `git clone --depth=50 <url>` instead of a standard `git clone` or a `--depth=1`.
+
+### Why not a full clone?
+A full `git clone` downloads the entire history of the repository since its creation. For large repositories, this could mean downloading gigabytes of data and taking minutes to complete. We only need the files exactly as they exist right now for a quick code review, so downloading 10 years of Git history is a waste of bandwidth and severely slows down the webhook response time.
+
+### Why not `--depth=1`?
+A `--depth=1` clone gets *only* the single most recent commit on the default branch. However, for a Pull Request review, we need exactly two specific commits:
+1. `base_sha`: The commit on the main branch the PR is merging into.
+2. `head_sha`: The latest commit on the developer's feature branch.
+
+The `base_sha` might not be the absolute latest commit on the main branch (e.g., if other people merged PRs while the developer was working). The `head_sha` is definitely on a completely different branch. If we only clone 1 commit, Git has no context of how these two commits relate to each other, and it won't download the files associated with the feature branch.
+
+### The Sweet Spot: `--depth=50`
+By grabbing the last 50 commits:
+- It is still incredibly fast (usually less than a second).
+- It gives Git enough local history to understand the "tree" structure of recent branches.
+- It highly increases the probability that the `base_sha` is already included in the download without needing a second network request.
+- *Note:* Immediately after this, we explicitly run `git fetch origin <base_sha> <head_sha>`. If those commits were caught in the 50-commit net, this command is instant. If they were further back, this command grabs just those specific commits. This guarantees we have exactly what we need, as fast as possible.
