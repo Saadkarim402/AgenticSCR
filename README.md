@@ -108,5 +108,10 @@ The webhook receiver securely verifies GitHub HMAC-SHA256 signatures, filters fo
 
 This project references the following research papers:
 
-1. **[AgenticSCR: An Autonomous Agentic Secure Code Review for Immature Vulnerabilities Detection](https://arxiv.org/abs/2601.19138)** - Proposes the autonomous agentic secure code reviewer (Detector + Validator) using security-focused semantic memory for early-stage vulnerability identification.
-2. **[Effective and Efficient Context Retrieval via Partial Dependency Graph for Repository-Level Code Generation](https://arxiv.org/abs/2608.01927)** - Introduces DyRetriever, a graph-based code retrieval method utilizing a multi-hop reasoning LLM for tracing dependencies on the fly.
+1. **[AgenticSCR: An Autonomous Agentic Secure Code Review for Immature Vulnerabilities Detection](https://arxiv.org/abs/2601.19138)**
+   *By Wachiraphan Charoenwet, Kla Tantithamthavorn, Patanamon Thongtanunam, Hong Yi Lin, Minwoo Jeong, Ming Wu*
+   - **Summary:** Proposes an autonomous agentic secure code reviewer that uses security-focused semantic memory to detect context-dependent vulnerabilities early in the development lifecycle. By grounding reasoning in structured knowledge, AgenticSCR effectively identifies immature vulnerabilities before they fully manifest, achieving a 153% relative improvement over static LLM baselines in generating correct and relevant vulnerability reports.
+
+2. **[Effective and Efficient Context Retrieval via Partial Dependency Graph for Repository-Level Code Generation](https://arxiv.org/abs/2608.01927)**
+   *By Zhongxin Liu, Zhonghao Jiang, Zhifan Ye, Haoye Wang, Jiakun Liu, Xiaoxue Ren*
+   - **Summary:** Introduces **DyRetriever**, a novel graph-based context retrieval method. Rather than relying on rigid, pre-computed static global dependency graphs, DyRetriever uses an LLM to iteratively build and evaluate partial dependency graphs on the fly. This dynamic, multi-hop reasoning improves both retrieval relevance and efficiency, yielding significant performance gains (up to 59.73% relative Pass@1 improvement) while being 7.4x faster than static graph methods.
