@@ -30,7 +30,10 @@ flowchart TD
     end
 ```
 
-### Key Concepts & Innovations
+## 🌟 Key Features & Innovations
+
+- **Early-Stage Vulnerability Detection (AgenticSCR):** Acts as an autonomous agentic secure code reviewer that uses a security-focused semantic memory to detect context-dependent vulnerabilities early in the development lifecycle. By grounding reasoning in structured knowledge, it effectively identifies immature vulnerabilities before they fully manifest, achieving a **153% relative improvement** over static LLM baselines in generating correct and relevant vulnerability reports.
+- **Dynamic Multi-Hop Reasoning (DyRetriever):** Introduces a novel graph-based context retrieval method. Rather than relying on rigid, pre-computed static global dependency graphs, it uses an LLM to iteratively build and evaluate partial dependency graphs on the fly. This dynamic, multi-hop reasoning improves both retrieval relevance and efficiency, yielding significant performance gains (up to **59.73% relative Pass@1 improvement**) while being **7.4x faster** than static graph methods.
 - **The Git Staging Trick:** To securely analyze Pull Requests locally without modifying the core pipeline, the webhook runner uses `git reset --soft <base_sha>` to manipulate Git pointers. This mimics a staged environment containing exactly the PR diff.
 - **Optimized Shallow Clones:** When fetching PR code, the system uses a `--depth=50` shallow clone, minimizing bandwidth and ensuring lightning-fast webhook responses while retaining enough history for branch resolution.
 
