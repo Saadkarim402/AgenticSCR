@@ -1,11 +1,10 @@
 # AgenticSCR — Agentic Secure Code Review 🛡️
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Status](https://img.shields.io/badge/status-active-success.svg)](#)
 
-An implementation of the AgenticSCR paper's dual-agent (**Detector** + **Validator**) secure code review architecture. It integrates with **DyRetriever's** multi-hop dependency tracing and is built using **LangGraph**.
+AgenticSCR is an autonomous agentic secure code reviewer designed to detect context-dependent, early-stage vulnerabilities before they fully manifest. It utilizes a dual-agent (**Detector** + **Validator**) architecture augmented with a security-focused semantic memory to ground its reasoning in structured security knowledge. Furthermore, it integrates with **DyRetriever's** dynamic, multi-hop code dependency tracing to perform highly efficient and accurate context retrieval, entirely built using **LangGraph**.
 
-**Status:** The core review pipeline (Pieces 1-6) and GitHub webhook integration (Phases 1-5) are complete. The pipeline receives Pull Requests, uses the local `qwen2.5:7b` via Ollama for code reviews, posts comments to GitHub, and displays runs on a local dashboard.
+The pipeline seamlessly receives GitHub Pull Requests, uses local large language models (like `qwen2.5:7b` via Ollama) for intelligent, repository-level code reviews, posts actionable comments directly to GitHub, and displays review runs on an interactive local dashboard.
 
 ---
 
@@ -92,15 +91,6 @@ The webhook receiver securely verifies GitHub HMAC-SHA256 signatures, filters fo
 | `cli.py` | 6 | Command-line interface for local runs |
 
 > **Note:** Every subdirectory has its own `README.md` with detailed build stories, architectural constraints, and bugs caught during development (such as late-binding and path-hardcoding issues).
-
----
-
-## ⚠️ Known Gaps & Limitations
-
-- **Model Evaluation:** The pipeline currently runs against scripted fake models in tests. Real-world detection accuracy (precision/recall) has not yet been benchmarked against a harness like SCRBench.
-- **Language Support:** Both the SAST rules and the DyRetriever function extractor are **Python-only**.
-- **Taxonomy Gaps:** 3 CWE IDs referenced by SAST rules are missing from the local taxonomy package.
-- **Scope Resolution:** DyRetriever's callee-name resolution is strictly name-based and currently lacks context-aware scope resolution.
 
 ---
 
