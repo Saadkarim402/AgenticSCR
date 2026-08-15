@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgenticSCR Dashboard</title>
+    <style>
+        :root {
+            --bg-color: hsl(210, 20%, 98%);
+            --surface-color: hsl(0, 0%, 100%);
+            --border-color: hsl(210, 14%, 89%);
+            --text-main: hsl(210, 11%, 15%);
+            --text-muted: hsl(210, 11%, 40%);
+            --primary-color: hsl(212, 100%, 48%);
+            --primary-hover: hsl(212, 100%, 40%);
+            --danger-bg: hsl(354, 100%, 96%);
+            --danger-text: hsl(354, 70%, 45%);
+            --success-bg: hsl(137, 74%, 94%);
+            --success-text: hsl(137, 60%, 35%);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body { 
+            font-family: var(--font-family); 
+            background-color: var(--bg-color); 
+            margin: 0; 
+            padding: 40px 20px; 
+            color: var(--text-main); 
+            line-height: 1.5;
+        }
+
+        .container { 
+            max-width: 1100px; 
+            margin: 0 auto; 
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: hsl(210, 20%, 96%);
+            border-color: var(--text-muted);
+        }
+
+        h1 { 
+            margin: 0; 
+            font-size: 28px; 
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .card {
+            background: var(--surface-color); 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color); 
+            overflow: hidden;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            text-align: left;
+        }
+
+        th, td { 
+            padding: 16px 24px; 
+            border-bottom: 1px solid var(--border-color); 
+        }
+
+        th { 
+            background-color: hsl(210, 20%, 99%); 
+            font-weight: 500; 
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted); 
+        }
+
+        tbody tr {
+            transition: background-color 0.15s ease;
+            cursor: pointer;
+        }
+
+        tbody tr:hover { 
+            background-color: hsl(210, 20%, 96%); 
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        a { 
+            color: var(--primary-color); 
+            text-decoration: none; 
+            font-weight: 500;
+        }
+
+        a:hover { 
+            text-decoration: underline; 
+        }
+
+        .badge { 
+            padding: 4px 10px; 
+            border-radius: 999px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+        .badge-success { background-color: var(--success-bg); color: var(--success-text); }
+        .badge-neutral { background-color: var(--border-color); color: var(--text-muted); }
+
+        .empty-state { 
+            text-align: center; 
+            padding: 60px 20px; 
+            color: var(--text-muted); 
+        }
+
+        .repo-name { font-weight: 500; }
+        .run-id { font-family: monospace; font-size: 13px; color: var(--text-muted); }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--surface-color);
+            width: 100%;
+            max-width: 900px;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+            line-height: 1;
+            padding: 0;
+        }
+
+        .modal-close:hover { color: var(--text-main); }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .log-entry {
+            margin-bottom: 16px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .log-entry.human { border-left: 4px solid var(--primary-color); }
+        .log-entry.assistant { border-left: 4px solid var(--success-text); }
+        .log-entry.tool { border-left: 4px solid var(--text-muted); }
+
+        .log-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .log-content {
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+        }
+
+        .system-log-content {
+            font-family: monospace;
+            font-size: 12px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AgenticSCR Reviews</h1>
+            <button class="btn" onclick="openSystemLogsModal()">View System Logs</button>
+        </div>
+        
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Repository</th>
+                        <th>Pull Request</th>
+                        <th>Confirmed Issues</th>
+                        <th>Log ID</th>
+                    </tr>
+                </thead>
+                <tbody id="runs-tbody">
+                    <tr><td colspan="5" class="empty-state">Loading runs...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Review Log Modal -->
+    <div class="modal-overlay" id="logModal" onclick="if(event.target===this) closeLogModal()">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Review Log: <span id="modalRunId" style="font-family: monospace;"></span></h3>
+                <button class="modal-close" onclick="closeLogModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="empty-state">Loading logs...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Log Modal -->
+    <div class="modal-overlay" id="systemLogModal" onclick="if(event.target===this) closeSystemLogModal()">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Live System Logs (Terminal)</h3>
+                <button class="modal-close" onclick="closeSystemLogModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="background: #1e1e1e;">
+                <pre class="system-log-content" id="systemLogBody">Loading system logs...</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadRuns() {
+            try {
+                const response = await fetch('/api/runs');
+                const runs = await response.json();
+                const tbody = document.getElementById('runs-tbody');
+                
+                if (runs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No reviews found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                runs.forEach(run => {
+                    const date = new Date(run.timestamp * 1000).toLocaleString();
+                    const repoName = run.repo ? `${run.owner}/${run.repo}` : run.repo_path.split('/').pop() || run.repo_path;
+                    
+                    let prLink = run.pr_number ? `#${run.pr_number}` : 'Local Run';
+                    if (run.pr_url) prLink = `<a href="${run.pr_url}" target="_blank" onclick="event.stopPropagation()">#${run.pr_number}</a>`;
+                    
+                    let confirmedBadge = run.validator_confirmed_count > 0 
+                        ? `<span class="badge badge-danger">${run.validator_confirmed_count} Findings</span>`
+                        : `<span class="badge badge-success">Clean</span>`;
+                        
+                    tbody.innerHTML += `
+                        <tr onclick="openLogModal('${run.run_id}')">
+                            <td>${date}</td>
+                            <td class="repo-name">${repoName}</td>
+                            <td>${prLink}</td>
+                            <td>${confirmedBadge}</td>
+                            <td><span class="run-id">${run.run_id.substring(0, 8)}...</span></td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error("Error loading runs:", err);
+                document.getElementById('runs-tbody').innerHTML = `<tr><td colspan="5" class="empty-state" style="color:red">Failed to load data.</td></tr>`;
+            }
+        }
+
+        async function openLogModal(runId) {
+            const modal = document.getElementById('logModal');
+            const modalBody = document.getElementById('modalBody');
+            document.getElementById('modalRunId').innerText = runId;
+            modalBody.innerHTML = '<div class="empty-state">Loading logs...</div>';
+            modal.classList.add('active');
+
+            try {
+                const response = await fetch(`/api/runs/${runId}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    modalBody.innerHTML = `<div class="empty-state" style="color:var(--danger-text)">${data.error}</div>`;
+                    return;
+                }
+
+                if (!data.logs || data.logs.length <= 1) {
+                    modalBody.innerHTML = `<div class="empty-state">No conversational logs found.</div>`;
+                    return;
+                }
+
+                modalBody.innerHTML = '';
+                // Skip the first line (metadata header)
+                for (let i = 1; i < data.logs.length; i++) {
+                    const log = data.logs[i];
+                    if (!log.role) continue;
+                    
+                    let content = log.content || '';
+                    if (log.tool_calls) {
+                        content += "\n[Tool Calls]: " + JSON.stringify(log.tool_calls, null, 2);
+                    }
+                    if (log.tool_call_id) {
+                        content = "[Tool Response]:\n" + content;
+                    }
+
+                    modalBody.innerHTML += `
+                        <div class="log-entry ${log.role}">
+                            <div class="log-meta">
+                                <span>Agent: ${log.subagent || 'system'}</span>
+                                <span>Role: ${log.role}</span>
+                            </div>
+                            <pre class="log-content">${escapeHtml(content)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                modalBody.innerHTML = `<div class="empty-state" style="color:var(--danger-text)">Error fetching logs</div>`;
+            }
+        }
+
+        async function openSystemLogsModal() {
+            const modal = document.getElementById('systemLogModal');
+            const logBody = document.getElementById('systemLogBody');
+            logBody.innerText = 'Loading system logs...';
+            modal.classList.add('active');
+
+            try {
+                const response = await fetch('/api/system_logs');
+                const data = await response.json();
+                if (data.logs) {
+                    logBody.innerText = data.logs;
+                    // Auto-scroll to bottom
+                    logBody.scrollTop = logBody.scrollHeight;
+                } else {
+                    logBody.innerText = "No logs found.";
+                }
+            } catch (err) {
+                logBody.innerText = "Error fetching system logs.";
+            }
+        }
+
+        function closeLogModal() {
+            document.getElementById('logModal').classList.remove('active');
+        }
+
+        function closeSystemLogModal() {
+            document.getElementById('systemLogModal').classList.remove('active');
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+        
+        loadRuns();
+    </script>
+</body>
+</html>

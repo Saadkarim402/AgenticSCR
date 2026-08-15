@@ -4,6 +4,7 @@ import hashlib
 import json
 from fastapi.testclient import TestClient
 from webhook.app import app
+from unittest.mock import patch, MagicMock
 
 client = TestClient(app)
 
@@ -107,3 +108,40 @@ def test_valid_pr_event_accepted():
     )
     assert response.status_code == 200
     assert response.json()["status"] == "accepted"
+
+@patch("webhook.app.json.dump")
+@patch("webhook.app.DEFAULT_LOG_DIR")
+@patch("webhook.app.post_pr_review")
+@patch("webhook.app.run_pr_review")
+def test_process_review_background_sidecar(mock_run, mock_post, mock_log_dir, mock_json_dump):
+    mock_run.return_value = {"run_id": "run123", "confirmed_findings": []}
+    mock_post.return_value = "http://github.com/review"
+    
+    mock_path = MagicMock()
+    mock_log_dir.__truediv__.return_value = mock_path
+    mock_file = MagicMock()
+    mock_path.open.return_value.__enter__.return_value = mock_file
+    
+    from webhook.app import process_review_background
+    pr_data = {
+        "repository_full_name": "test/repo",
+        "repository_clone_url": "url",
+        "pull_request_number": 1,
+        "pull_request_head_sha": "head",
+        "pull_request_base_sha": "base",
+        "pull_request_html_url": "pr_url"
+    }
+    
+    process_review_background(pr_data)
+    
+    mock_log_dir.mkdir.assert_called_once_with(parents=True, exist_ok=True)
+    mock_log_dir.__truediv__.assert_called_once_with("run123.pr_meta.json")
+    mock_path.open.assert_called_once_with("w")
+    
+    mock_json_dump.assert_called_once()
+    args = mock_json_dump.call_args[0]
+    assert args[0]["run_id"] == "run123"
+    assert args[0]["owner"] == "test"
+    assert args[0]["repo"] == "repo"
+    assert args[0]["pr_number"] == 1
+

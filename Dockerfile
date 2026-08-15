@@ -1,28 +1,30 @@
-FROM python:3.11-slim
+# Use an official Python runtime as a parent image
+FROM python:3.12-slim
 
-# Install git and clean up apt cache
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PORT=8000
 
-# Set working directory
+# Set work directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install system dependencies (git is required for cloning repos)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy the rest of the application
-COPY . .
+# Install python dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install gunicorn uvicorn[standard]
 
-# Ensure the logs directory exists
-RUN mkdir -p logs
+# Copy project
+COPY . /app/
 
-# Expose the port FastAPI runs on
-EXPOSE 8000
+# Expose the port
+EXPOSE $PORT
 
-# Set environment variables (these should be overridden at runtime)
-ENV GITHUB_TOKEN=""
-ENV GITHUB_WEBHOOK_SECRET=""
-ENV OLLAMA_HOST="http://host.docker.internal:11434"
-
-# Start the unified Webhook Receiver and Dashboard service
-CMD ["uvicorn", "webhook.app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Command to run the application via Gunicorn for production
+CMD ["gunicorn", "webhook.app:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]

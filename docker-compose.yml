@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  agenticscr:
+    build: .
+    container_name: agenticscr-server
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    volumes:
+      - ./logs:/app/logs
+    # Optional: If you are running an Nginx reverse proxy, you might want to attach this to a specific network.
+    # networks:
+    #   - webnet
+
+# networks:
+#   webnet:
+#     external: true

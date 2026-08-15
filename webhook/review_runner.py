@@ -4,7 +4,7 @@ import tempfile
 import logging
 from typing import Dict, Any
 
-from langchain_ollama import ChatOllama
+from langchain_groq import ChatGroq
 from orchestrator.orchestrator import run_full_review
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ def run_pr_review(
         
         # Step 3: Run the review
         logger.info("Starting orchestrator review pipeline")
-        model = ChatOllama(model="qwen2.5:7b", temperature=0)
+        model = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
         result = run_full_review(model, tmpdir)
         
         findings_count = len(result.get('confirmed_findings', []))

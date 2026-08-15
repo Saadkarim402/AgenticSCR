@@ -1,16 +1,38 @@
 import hmac
 import hashlib
+import json
 import os
 import logging
+from pathlib import Path
 from fastapi import FastAPI, Header, Request, HTTPException, BackgroundTasks
 from typing import Optional, Dict, Any
 
 from webhook.review_runner import run_pr_review
 from webhook.github_client import post_pr_review
+from orchestrator.orchestrator import DEFAULT_LOG_DIR
+from dashboard.app import router as dashboard_router
+
+from langchain_core.globals import set_debug
+set_debug(True)
+
+from logging.handlers import RotatingFileHandler
+
+DEFAULT_LOG_DIR = Path("logs")
+DEFAULT_LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[
+        RotatingFileHandler(DEFAULT_LOG_DIR / "agenticscr.log", maxBytes=5*1024*1024, backupCount=5),
+        logging.StreamHandler()
+    ]
+)
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="AgenticSCR Webhook Receiver")
+app.include_router(dashboard_router)
 
 def verify_signature(payload_body: bytes, secret_token: str, signature_header: str) -> bool:
     """Verify that the payload was sent from GitHub by validating SHA256."""
@@ -51,6 +73,23 @@ def process_review_background(pr_data: Dict[str, Any]):
             logger.info(f"Review posted successfully for PR #{pr_data['pull_request_number']}: {review_url}")
         else:
             logger.info(f"Review finished for PR #{pr_data['pull_request_number']}, but no review was posted.")
+            
+        # Phase 4: Sidecar logging
+        run_id = result.get('run_id')
+        if run_id:
+            DEFAULT_LOG_DIR.mkdir(parents=True, exist_ok=True)
+            meta_path = DEFAULT_LOG_DIR / f"{run_id}.pr_meta.json"
+            meta_data = {
+                "run_id": run_id,
+                "owner": owner,
+                "repo": repo,
+                "pr_number": pr_data["pull_request_number"],
+                "pr_url": pr_data.get("pull_request_html_url", ""),
+                "posted_review_url": review_url
+            }
+            with meta_path.open("w") as f:
+                json.dump(meta_data, f)
+            logger.info(f"Wrote PR meta sidecar to {meta_path}")
     except Exception as e:
         logger.error(f"Error running PR review: {e}")
 

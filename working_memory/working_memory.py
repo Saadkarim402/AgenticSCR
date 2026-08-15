@@ -24,6 +24,7 @@ pieces needed to actually use it:
 """
 from __future__ import annotations
 
+import operator
 from typing import Annotated, Optional, TypedDict
 
 from langchain_core.tools import InjectedToolCallId, tool
@@ -64,6 +65,20 @@ class CandidateFinding(BaseModel):
 # Graph state
 # --------------------------------------------------------------------------
 
+def deduplicate_findings(left: list[dict], right: list[dict]) -> list[dict]:
+    merged = left.copy()
+    for finding in right:
+        is_duplicate = False
+        for existing in merged:
+            if (existing["file"] == finding["file"] and 
+                existing["line_start"] == finding["line_start"] and 
+                existing["title"] == finding["title"]):
+                is_duplicate = True
+                break
+        if not is_duplicate:
+            merged.append(finding)
+    return merged
+
 class DetectorState(AgentState):
     """Graph state for the Detector subagent's LangGraph run.
     This whole dict *is* Working Memory (M_w) for one review session.
@@ -76,7 +91,7 @@ class DetectorState(AgentState):
     changed_files: list[str]
     file_cache: dict[str, str]                # open_files results, keyed by file path
     chunk_cache: dict[str, str]                # expand_code_chunks results, keyed "file:start-end"
-    candidate_findings: list[dict]             # accumulating buffer -> handed to Validator
+    candidate_findings: Annotated[list[dict], deduplicate_findings]  # accumulating buffer -> handed to Validator
     tool_call_count: int
 
 
@@ -127,13 +142,12 @@ def record_candidate_finding(
         confidence=confidence,
     ).model_dump()
 
-    updated = state.get("candidate_findings", []) + [finding]
     return Command(
         update={
-            "candidate_findings": updated,
+            "candidate_findings": [finding],
             "messages": [
                 ToolMessage(
-                    content=f"Recorded candidate finding #{len(updated)}: {title} ({file}:{line_start}-{line_end})",
+                    content=f"Recorded candidate finding: {title} ({file}:{line_start}-{line_end})",
                     tool_call_id=tool_call_id,
                 )
             ],

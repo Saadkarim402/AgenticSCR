@@ -51,7 +51,7 @@ def _message_to_event(msg, subagent: str) -> dict:
             "subagent": subagent,
             "role": "tool_result",
             "tool_call_id": msg.tool_call_id,
-            "content": str(msg.content)[:2000],
+            "content": str(msg.content),
         }
     if isinstance(msg, AIMessage):
         event = {"subagent": subagent, "role": "assistant", "content": msg.content}
