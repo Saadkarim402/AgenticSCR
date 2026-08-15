@@ -101,3 +101,12 @@ The webhook receiver securely verifies GitHub HMAC-SHA256 signatures, filters fo
 - **Language Support:** Both the SAST rules and the DyRetriever function extractor are **Python-only**.
 - **Taxonomy Gaps:** 3 CWE IDs referenced by SAST rules are missing from the local taxonomy package.
 - **Scope Resolution:** DyRetriever's callee-name resolution is strictly name-based and currently lacks context-aware scope resolution.
+
+---
+
+## 📚 References
+
+This project references the following research papers:
+
+1. **[AgenticSCR: An Autonomous Agentic Secure Code Review for Immature Vulnerabilities Detection](https://arxiv.org/abs/2601.19138)** - Proposes the autonomous agentic secure code reviewer (Detector + Validator) using security-focused semantic memory for early-stage vulnerability identification.
+2. **[Effective and Efficient Context Retrieval via Partial Dependency Graph for Repository-Level Code Generation](https://arxiv.org/abs/2608.01927)** - Introduces DyRetriever, a graph-based code retrieval method utilizing a multi-hop reasoning LLM for tracing dependencies on the fly.
